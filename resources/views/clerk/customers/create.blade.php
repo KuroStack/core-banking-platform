@@ -16,7 +16,7 @@
                 </div>
             </div>
 
-            <form action="{{ route('clerk.customers.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('clerk.customers.store') }}" method="POST" enctype="multipart/form-data" data-validate>
                 @csrf
 
                 <div class="card-body">

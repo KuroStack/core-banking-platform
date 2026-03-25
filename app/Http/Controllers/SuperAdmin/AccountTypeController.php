@@ -37,6 +37,11 @@ class AccountTypeController extends Controller
             ->with('success', 'Account type created successfully.');
     }
 
+    public function show(AccountType $accountType)
+    {
+        return view('superadmin.account-types.show', compact('accountType'));
+    }
+
     public function edit(AccountType $accountType)
     {
         return view('superadmin.account-types.edit', compact('accountType'));

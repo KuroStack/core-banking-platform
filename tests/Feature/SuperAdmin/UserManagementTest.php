@@ -56,6 +56,16 @@ class UserManagementTest extends TestCase
             ->assertSee('Main');
     }
 
+    public function test_user_show_page_loads(): void
+    {
+        $this->actingAs($this->admin)
+            ->get("/superadmin/users/{$this->admin->id}")
+            ->assertOk()
+            ->assertSee('Admin')
+            ->assertSee('SuperAdmin')
+            ->assertSee('Back to Users');
+    }
+
     public function test_can_create_user(): void
     {
         $clerkRole = Role::where('name', 'Clerk')->first();

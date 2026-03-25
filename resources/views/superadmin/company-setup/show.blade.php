@@ -6,7 +6,7 @@
 @section('content')
 <div class="card card-primary">
     <div class="card-header"><h3 class="card-title">Company Configuration</h3></div>
-    <form action="{{ route('superadmin.company-setup.update') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('superadmin.company-setup.update') }}" method="POST" data-validate enctype="multipart/form-data">
         @csrf @method('PUT')
         <div class="card-body">
             <div class="row">

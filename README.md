@@ -27,6 +27,7 @@ Most cooperative banks in India still run on legacy desktop software or expensiv
 - [API Reference](#api-reference)
 - [Scheduled Tasks](#scheduled-tasks)
 - [Testing](#testing)
+- [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -69,7 +70,7 @@ Most cooperative banks in India still run on legacy desktop software or expensiv
 - **Event-Driven Architecture** — 11 domain events with queued listeners for notifications, audit logging, and schedule generation
 - **REST API** — Full Sanctum-authenticated API for mobile/SPA clients (customers, accounts, transactions, loans, FDs)
 - **Docker Standalone** — One-command deployment with Nginx, PHP-FPM, queue worker, and scheduler bundled in a single container
-- **163 Automated Tests** — 157 PHPUnit tests (109 web + 48 API) + 6 Dusk browser tests with 68 auto-generated screenshots
+- **184 Automated Tests** — 178 PHPUnit tests (114 web + 16 new features + 48 API) + 6 Dusk browser tests with 68+ auto-generated screenshots
 
 ---
 
@@ -533,10 +534,65 @@ tests/Browser/screenshots/       # Auto-generated, organized by role
 
 | Suite | Tests | Assertions | Duration |
 |---|---|---|---|
-| PHPUnit — Web (Feature + Unit) | 109 | 284 | ~3s |
+| PHPUnit — Web (Feature + Unit) | 130 | 340 | ~3s |
 | PHPUnit — API (Sanctum) | 48 | 162 | ~1s |
-| Dusk — Browser (headless Chrome) | 6 | 67 | ~140s |
-| **Total** | **163** | **513** | — |
+| Dusk — Browser (headless Chrome) | 6 | 72 | ~140s |
+| **Total** | **184** | **574** | — |
+
+---
+
+## Roadmap
+
+Planned improvements to make the system production-ready for real bank operations. Contributions welcome — pick any item and open a PR.
+
+### UX & Forms
+- [x] **Searchable dropdowns** (Select2 / Tom Select) for customer and account lookups — critical for clerks processing 100+ customers/day
+- [x] **Client-side validation** with real-time inline feedback on all forms
+- [x] **Confirmation modals** before destructive actions (approve, reject, deactivate, delete)
+- [x] **Field help text and format hints** on forms (e.g., branch code format, PAN pattern)
+- [x] **Pagination styling** — publish Laravel paginator views for AdminLTE theme
+
+### Printing & Export
+- [x] **Print-friendly transaction receipts** — clean, styled print layout for every deposit, withdrawal, and repayment
+- [x] **CSV export** on all accountant reports (loan outstanding, transaction statement, demand sheet)
+- [ ] **Account statement PDF** generation for customers
+
+### Search & Filtering
+- [x] **Search bar** — search customers, accounts, loans by name, number, or mobile across the app
+- [ ] **Advanced filters** on all index pages — date range, status, branch, loan type
+- [ ] **Transaction history search** with date range and account number filtering on cashier pages
+
+### Authentication & Security
+- [x] **Password change** page for logged-in users
+- [x] **Forgot password** flow with email-based reset tokens
+- [ ] **Two-factor authentication (2FA)** via OTP for sensitive operations
+- [ ] **Session timeout warning** with auto-logout countdown
+- [ ] **Login audit log** — track login attempts, IPs, and devices
+
+### Banking Features
+- [x] **Bulk customer approval** — approve/reject multiple pending customers at once
+- [ ] **Interest posting** — automated monthly/quarterly interest credit to savings accounts
+- [ ] **Account statement generation** — downloadable PDF statements for any date range
+- [ ] **Cheque book management** — issue, track, and stop-payment for cheque books
+- [ ] **Inter-branch transfers** — transfer funds between accounts across branches
+- [ ] **Standing instructions** — recurring automated transfers and payments
+- [ ] **NPA classification** — auto-flag overdue loans as NPA based on RBI norms
+
+### Reports & Analytics
+- [ ] **Dashboard charts** — visual graphs for deposit trends, loan portfolio, branch performance
+- [ ] **Day book / cash book** — daily summary of all cash transactions per branch
+- [ ] **Trial balance & P&L** — basic accounting reports
+- [ ] **Overdue loan alerts** — email/SMS notifications for upcoming and overdue EMIs
+- [ ] **Branch comparison report** — compare performance metrics across branches
+
+### Technical
+- [ ] **Model factories** for all models — enable faster test writing
+- [ ] **Notification channels** — implement real SMS/email drivers (currently log-only)
+- [ ] **API rate limiting** and request throttling
+- [ ] **Webhook support** for third-party integrations
+- [x] **Mobile-responsive testing** — verify all pages work on tablets (common in bank branches)
+- [x] **Accessibility audit** — ARIA labels, keyboard navigation, screen reader support
+- [ ] **CI/CD pipeline** — GitHub Actions for automated testing on every push
 
 ---
 

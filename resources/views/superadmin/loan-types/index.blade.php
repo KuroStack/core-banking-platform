@@ -42,9 +42,10 @@
                         @endif
                     </td>
                     <td>
+                        <a href="{{ route('superadmin.loan-types.show', $lt) }}" class="btn btn-xs btn-default"><i class="fas fa-eye"></i> View</a>
                         <a href="{{ route('superadmin.loan-types.edit', $lt) }}" class="btn btn-xs btn-info"><i class="fas fa-edit"></i> Edit</a>
                         @if($lt->is_active)
-                        <form action="{{ route('superadmin.loan-types.destroy', $lt) }}" method="POST" class="d-inline" onsubmit="return confirm('Deactivate this loan type?')">
+                        <form action="{{ route('superadmin.loan-types.destroy', $lt) }}" method="POST" class="d-inline" data-confirm="Deactivate this item?" data-confirm-text="This will mark it as inactive.">
                             @csrf @method('DELETE')
                             <button class="btn btn-xs btn-danger"><i class="fas fa-ban"></i> Deactivate</button>
                         </form>

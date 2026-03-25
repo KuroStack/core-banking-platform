@@ -6,7 +6,7 @@
 @section('content')
 <div class="card card-primary">
     <div class="card-header"><h3 class="card-title">New Account Type</h3></div>
-    <form action="{{ route('superadmin.account-types.store') }}" method="POST">
+    <form action="{{ route('superadmin.account-types.store') }}" method="POST" data-validate>
         @csrf
         <div class="card-body">
             <div class="row">

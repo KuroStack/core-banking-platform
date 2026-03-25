@@ -43,6 +43,16 @@ class FdSetupTest extends TestCase
             ->assertSee('New FD Scheme');
     }
 
+    public function test_fd_setup_show_page_loads(): void
+    {
+        $fd = FdSetup::create(['description' => 'Show FD', 'duration_days' => 180, 'interest_rate' => 6.5, 'is_active' => true]);
+        $this->actingAs($this->admin)
+            ->get("/superadmin/fd-setups/{$fd->id}")
+            ->assertOk()
+            ->assertSee('Show FD')
+            ->assertSee('Back to FD Setups');
+    }
+
     public function test_can_create_fd_setup(): void
     {
         $this->actingAs($this->admin)

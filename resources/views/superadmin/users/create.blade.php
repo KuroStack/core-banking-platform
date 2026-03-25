@@ -6,22 +6,23 @@
 @section('content')
 <div class="card card-primary">
     <div class="card-header"><h3 class="card-title">New User</h3></div>
-    <form action="{{ route('superadmin.users.store') }}" method="POST">
+    <form action="{{ route('superadmin.users.store') }}" method="POST" data-validate>
         @csrf
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Full Name <span class="text-danger">*</span></label>
-                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required>
+                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required aria-required="true" placeholder="e.g. Ramesh Kumar">
                         @error('name') <span class="invalid-feedback">{{ $message }}</span> @enderror
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Email <span class="text-danger">*</span></label>
-                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required>
+                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required aria-required="true" placeholder="e.g. ramesh@coopbank.com">
                         @error('email') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                        <small class="form-text">Used for login. Must be unique.</small>
                     </div>
                 </div>
             </div>
@@ -29,8 +30,9 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Password <span class="text-danger">*</span></label>
-                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required>
+                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required aria-required="true" minlength="8">
                         @error('password') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                        <small class="form-text">Minimum 8 characters</small>
                     </div>
                 </div>
                 <div class="col-md-6">

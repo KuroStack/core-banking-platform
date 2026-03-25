@@ -37,6 +37,11 @@ class FdSetupController extends Controller
             ->with('success', 'FD setup created successfully.');
     }
 
+    public function show(FdSetup $fdSetup)
+    {
+        return view('superadmin.fd-setups.show', compact('fdSetup'));
+    }
+
     public function edit(FdSetup $fdSetup)
     {
         return view('superadmin.fd-setups.edit', compact('fdSetup'));

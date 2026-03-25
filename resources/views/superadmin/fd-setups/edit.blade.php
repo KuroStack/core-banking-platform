@@ -6,7 +6,7 @@
 @section('content')
 <div class="card card-warning">
     <div class="card-header"><h3 class="card-title">Edit FD Scheme #{{ $fdSetup->id }}</h3></div>
-    <form action="{{ route('superadmin.fd-setups.update', $fdSetup) }}" method="POST">
+    <form action="{{ route('superadmin.fd-setups.update', $fdSetup) }}" method="POST" data-validate>
         @csrf @method('PUT')
         <div class="card-body">
             <div class="row">

@@ -48,10 +48,18 @@ class T02_SuperAdminFlowTest extends DuskTestCase
                 ->assertSee('BRDWN')
                 ->screenshot('02-superadmin/14-branch-created');
 
+            // View detail page
+            $browser->clickLink('View')
+                ->waitForText('Branch Details')
+                ->assertSee('Downtown Branch')
+                ->assertSee('BRDWN')
+                ->assertSee('Back to Branches')
+                ->screenshot('02-superadmin/15-branch-show');
+
             $browser->clickLink('Edit')
                 ->waitForText('Edit:')
                 ->assertSee('Downtown Branch')
-                ->screenshot('02-superadmin/15-branch-edit-form')
+                ->screenshot('02-superadmin/16-branch-edit-form')
                 ->clear('name')
                 ->type('name', 'Downtown HQ')
                 ->press('Update Branch')
@@ -85,10 +93,17 @@ class T02_SuperAdminFlowTest extends DuskTestCase
                 ->assertSee('duskclerk@coopbank.com')
                 ->screenshot('02-superadmin/20-user-created');
 
-            // Users index shows the new user
+            // Users index shows the new user — click View
             $browser->assertSee('Test Clerk')
                 ->assertSee('Clerk')
                 ->screenshot('02-superadmin/21-users-index-with-data');
+
+            // View user detail page
+            $browser->clickLink('View')
+                ->waitForText('User Details')
+                ->assertSee('duskclerk@coopbank.com')
+                ->assertSee('Back to Users')
+                ->screenshot('02-superadmin/22-user-show');
 
             // ════════════════════════════════════════════════════
             // LOAN TYPES: index → create → index → edit

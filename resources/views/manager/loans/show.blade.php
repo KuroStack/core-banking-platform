@@ -37,4 +37,5 @@
         </div>
     </div>
 </div>
+<a href="{{ route('manager.loans.index') }}" class="btn btn-default mb-3"><i class="fas fa-arrow-left"></i> Back to Loans</a>
 @endsection

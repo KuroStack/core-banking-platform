@@ -34,4 +34,5 @@
         </div>
     </div>
 </div>
+<a href="{{ route('manager.bank-accounts.index') }}" class="btn btn-default mb-3"><i class="fas fa-arrow-left"></i> Back to Accounts</a>
 @endsection

@@ -35,6 +35,16 @@ class AccountTypeTest extends TestCase
             ->assertSee('Manage Account Types');
     }
 
+    public function test_account_type_show_page_loads(): void
+    {
+        $at = AccountType::create(['name' => 'Show Type', 'type' => 'Savings', 'is_active' => true]);
+        $this->actingAs($this->admin)
+            ->get("/superadmin/account-types/{$at->id}")
+            ->assertOk()
+            ->assertSee('Show Type')
+            ->assertSee('Back to Account Types');
+    }
+
     public function test_can_create_account_type(): void
     {
         $this->actingAs($this->admin)

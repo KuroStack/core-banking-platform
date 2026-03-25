@@ -16,5 +16,8 @@
             <tr><th>Status</th><td><span class="badge badge-{{ $fdAccount->is_matured ? 'warning' : 'success' }}">{{ $fdAccount->is_matured ? 'Matured' : 'Active' }}</span></td></tr>
         </table>
     </div>
+    <div class="card-footer">
+        <a href="{{ route('manager.fd-accounts.index') }}" class="btn btn-default"><i class="fas fa-arrow-left"></i> Back to FD Accounts</a>
+    </div>
 </div>
 @endsection

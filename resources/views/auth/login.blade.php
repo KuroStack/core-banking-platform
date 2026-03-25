@@ -85,7 +85,7 @@
                     </div>
                 </div>
             </form>
-
+            <p class="mt-2 mb-0"><a href="{{ route('password.request') }}">Forgot your password?</a></p>
         </div>
     </div>
 </div>

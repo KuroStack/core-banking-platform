@@ -3,7 +3,13 @@
 @section('page-title', 'Loan Demand Collection Sheet')
 @section('content')
 <div class="card">
-    <div class="card-header"><h3 class="card-title">Demand Sheet</h3></div>
+    <div class="card-header">
+        <h3 class="card-title">Demand Sheet</h3>
+        <div class="card-tools no-print">
+            <a href="{{ request()->fullUrlWithQuery(['export' => 'csv']) }}" class="btn btn-success btn-sm"><i class="fas fa-file-csv"></i> Download CSV</a>
+            <button onclick="window.print()" class="btn btn-primary btn-sm"><i class="fas fa-print"></i> Print</button>
+        </div>
+    </div>
     <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
             <thead><tr><th>Loan #</th><th>Customer</th><th>Type</th><th>EMI</th><th>Outstanding</th><th>Last Payment</th></tr></thead>

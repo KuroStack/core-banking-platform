@@ -14,7 +14,7 @@
             <strong>{{ $loan->customer?->full_name }}</strong> — {{ $loan->loanType?->name }}<br>
             Outstanding: <strong>{{ number_format($loan->outstanding_balance, 2) }}</strong> | EMI: {{ number_format($loan->installment_amount, 2) }}
         </div>
-        <form action="{{ route('cashier.loan-repayments.store') }}" method="POST">@csrf
+        <form action="{{ route('cashier.loan-repayments.store') }}" method="POST" data-validate>@csrf
             <input type="hidden" name="loan_id" value="{{ $loan->id }}">
             <div class="row">
                 <div class="col-md-3"><div class="form-group"><label>Amount Paid <span class="text-danger">*</span></label><input type="number" step="0.01" name="amount_paid" class="form-control" required></div></div>

@@ -11,6 +11,9 @@
             <a href="{{ route('superadmin.users.create') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> New User</a>
         </div>
     </div>
+    <div class="card-body">
+        @include('layouts.partials.search-bar', ['placeholder' => 'Search by name or email...'])
+    </div>
     <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
             <thead>
@@ -40,9 +43,10 @@
                         @endif
                     </td>
                     <td>
+                        <a href="{{ route('superadmin.users.show', $user) }}" class="btn btn-xs btn-default"><i class="fas fa-eye"></i> View</a>
                         <a href="{{ route('superadmin.users.edit', $user) }}" class="btn btn-xs btn-info"><i class="fas fa-edit"></i> Edit</a>
                         @if($user->is_active && $user->id !== auth()->id())
-                        <form action="{{ route('superadmin.users.destroy', $user) }}" method="POST" class="d-inline" onsubmit="return confirm('Deactivate this user?')">
+                        <form action="{{ route('superadmin.users.destroy', $user) }}" method="POST" class="d-inline" data-confirm="Deactivate this item?" data-confirm-text="This will mark it as inactive.">
                             @csrf @method('DELETE')
                             <button class="btn btn-xs btn-danger"><i class="fas fa-ban"></i> Deactivate</button>
                         </form>

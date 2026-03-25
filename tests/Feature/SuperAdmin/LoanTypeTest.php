@@ -43,6 +43,16 @@ class LoanTypeTest extends TestCase
             ->assertSee('New Loan Type');
     }
 
+    public function test_loan_type_show_page_loads(): void
+    {
+        $lt = LoanType::create(['name' => 'Show Test', 'interest_rate' => 10, 'duration_months' => 12, 'max_amount' => 100000, 'num_installments' => 12, 'is_active' => true]);
+        $this->actingAs($this->admin)
+            ->get("/superadmin/loan-types/{$lt->id}")
+            ->assertOk()
+            ->assertSee('Show Test')
+            ->assertSee('Back to Loan Types');
+    }
+
     public function test_can_create_loan_type(): void
     {
         $this->actingAs($this->admin)

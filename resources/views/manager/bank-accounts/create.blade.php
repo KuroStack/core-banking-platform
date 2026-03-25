@@ -4,7 +4,7 @@
 @section('content')
 <div class="card card-primary">
     <div class="card-header"><h3 class="card-title">New Account</h3></div>
-    <form action="{{ route('manager.bank-accounts.store') }}" method="POST">@csrf
+    <form action="{{ route('manager.bank-accounts.store') }}" method="POST" data-validate>@csrf
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">

@@ -11,6 +11,9 @@
             <a href="{{ route('superadmin.branches.create') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> New Branch</a>
         </div>
     </div>
+    <div class="card-body">
+        @include('layouts.partials.search-bar', ['placeholder' => 'Search by name or code...'])
+    </div>
     <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
             <thead>
@@ -38,9 +41,10 @@
                         @endif
                     </td>
                     <td>
+                        <a href="{{ route('superadmin.branches.show', $branch) }}" class="btn btn-xs btn-default"><i class="fas fa-eye"></i> View</a>
                         <a href="{{ route('superadmin.branches.edit', $branch) }}" class="btn btn-xs btn-info"><i class="fas fa-edit"></i> Edit</a>
                         @if($branch->is_active)
-                        <form action="{{ route('superadmin.branches.destroy', $branch) }}" method="POST" class="d-inline" onsubmit="return confirm('Deactivate this branch?')">
+                        <form action="{{ route('superadmin.branches.destroy', $branch) }}" method="POST" class="d-inline" data-confirm="Deactivate this item?" data-confirm-text="This will mark it as inactive.">
                             @csrf @method('DELETE')
                             <button class="btn btn-xs btn-danger"><i class="fas fa-ban"></i> Deactivate</button>
                         </form>

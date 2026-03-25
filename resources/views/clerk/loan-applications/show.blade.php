@@ -18,5 +18,8 @@
             <tr><th>Remark</th><td>{{ $loanApplication->approver_remark ?? '-' }}</td></tr>
         </table>
     </div>
+    <div class="card-footer">
+        <a href="{{ route('clerk.loan-applications.index') }}" class="btn btn-default"><i class="fas fa-arrow-left"></i> Back to Applications</a>
+    </div>
 </div>
 @endsection

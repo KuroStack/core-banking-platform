@@ -39,6 +39,11 @@ class LoanTypeController extends Controller
             ->with('success', 'Loan type created successfully.');
     }
 
+    public function show(LoanType $loanType)
+    {
+        return view('superadmin.loan-types.show', compact('loanType'));
+    }
+
     public function edit(LoanType $loanType)
     {
         return view('superadmin.loan-types.edit', compact('loanType'));

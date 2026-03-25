@@ -87,6 +87,18 @@ class BranchTest extends TestCase
             ->assertSessionHasErrors('code');
     }
 
+    public function test_branch_show_page_loads(): void
+    {
+        $branch = Branch::create(['name' => 'View Me', 'code' => 'BR999', 'address' => 'Show Addr', 'is_active' => true]);
+
+        $this->actingAs($this->admin)
+            ->get("/superadmin/branches/{$branch->id}")
+            ->assertOk()
+            ->assertSee('View Me')
+            ->assertSee('BR999')
+            ->assertSee('Back to Branches');
+    }
+
     public function test_branch_edit_form_loads(): void
     {
         $branch = Branch::create(['name' => 'Test', 'code' => 'BR001', 'address' => 'Addr', 'is_active' => true]);
@@ -111,6 +123,30 @@ class BranchTest extends TestCase
             ->assertSessionHas('success');
 
         $this->assertDatabaseHas('branches', ['id' => $branch->id, 'name' => 'New Name']);
+    }
+
+    public function test_search_branches_by_name(): void
+    {
+        Branch::create(['name' => 'Downtown', 'code' => 'DWN', 'address' => 'A', 'is_active' => true]);
+        Branch::create(['name' => 'Uptown', 'code' => 'UPT', 'address' => 'B', 'is_active' => true]);
+
+        $this->actingAs($this->admin)
+            ->get('/superadmin/branches?search=Down')
+            ->assertOk()
+            ->assertSee('Downtown')
+            ->assertDontSee('Uptown');
+    }
+
+    public function test_search_branches_by_code(): void
+    {
+        Branch::create(['name' => 'Branch A', 'code' => 'AAA', 'address' => 'A', 'is_active' => true]);
+        Branch::create(['name' => 'Branch B', 'code' => 'BBB', 'address' => 'B', 'is_active' => true]);
+
+        $this->actingAs($this->admin)
+            ->get('/superadmin/branches?search=BBB')
+            ->assertOk()
+            ->assertSee('Branch B')
+            ->assertDontSee('Branch A');
     }
 
     public function test_destroy_deactivates_branch(): void

@@ -6,22 +6,24 @@
 @section('content')
 <div class="card card-primary">
     <div class="card-header"><h3 class="card-title">New Branch</h3></div>
-    <form action="{{ route('superadmin.branches.store') }}" method="POST">
+    <form action="{{ route('superadmin.branches.store') }}" method="POST" data-validate>
         @csrf
         <div class="card-body">
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Branch Name <span class="text-danger">*</span></label>
-                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required>
+                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required aria-required="true" placeholder="e.g. Downtown Branch">
                         @error('name') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                        <small class="form-text">Full name of the branch as it appears on reports</small>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Branch Code <span class="text-danger">*</span></label>
-                        <input type="text" name="code" class="form-control @error('code') is-invalid @enderror" value="{{ old('code') }}" required>
+                        <input type="text" name="code" class="form-control @error('code') is-invalid @enderror" value="{{ old('code') }}" required aria-required="true" placeholder="e.g. BRDWN" maxlength="50">
                         @error('code') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                        <small class="form-text">Unique short code (max 50 chars). Cannot be changed later.</small>
                     </div>
                 </div>
                 <div class="col-md-4">

@@ -7,9 +7,13 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with(['role', 'branch'])->latest()->paginate(20);
+        $users = User::with(['role', 'branch'])
+            ->when($request->search, fn($q, $s) => $q->where('name', 'like', "%{$s}%")->orWhere('email', 'like', "%{$s}%"))
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
         return view('superadmin.users.index', compact('users'));
     }
 
@@ -44,6 +48,12 @@ class UserController extends Controller
 
         return redirect()->route('superadmin.users.index')
             ->with('success', 'User created successfully.');
+    }
+
+    public function show(User $user)
+    {
+        $user->load(['role', 'branch']);
+        return view('superadmin.users.show', compact('user'));
     }
 
     public function edit(User $user)

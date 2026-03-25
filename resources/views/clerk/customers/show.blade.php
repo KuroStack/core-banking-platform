@@ -19,5 +19,8 @@
             <tr><th>Status</th><td>{{ ucfirst($customer->approval_status) }}</td></tr>
         </table>
     </div>
+    <div class="card-footer">
+        <a href="{{ route('clerk.customers.index') }}" class="btn btn-default"><i class="fas fa-arrow-left"></i> Back to Customers</a>
+    </div>
 </div>
 @endsection

@@ -37,5 +37,8 @@
         </form>
     </div>
     @endif
+    <div class="card-footer">
+        <a href="{{ route('manager.loan-applications.index') }}" class="btn btn-default"><i class="fas fa-arrow-left"></i> Back to Applications</a>
+    </div>
 </div>
 @endsection

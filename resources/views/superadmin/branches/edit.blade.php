@@ -6,7 +6,7 @@
 @section('content')
 <div class="card card-warning">
     <div class="card-header"><h3 class="card-title">Edit: {{ $branch->name }}</h3></div>
-    <form action="{{ route('superadmin.branches.update', $branch) }}" method="POST">
+    <form action="{{ route('superadmin.branches.update', $branch) }}" method="POST" data-validate>
         @csrf @method('PUT')
         <div class="card-body">
             <div class="row">

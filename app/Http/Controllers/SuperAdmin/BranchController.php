@@ -6,9 +6,13 @@ use Illuminate\Http\Request;
 
 class BranchController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $branches = Branch::latest()->paginate(20);
+        $branches = Branch::query()
+            ->when($request->search, fn($q, $s) => $q->where('name', 'like', "%{$s}%")->orWhere('code', 'like', "%{$s}%"))
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
         return view('superadmin.branches.index', compact('branches'));
     }
 
@@ -33,6 +37,12 @@ class BranchController extends Controller
 
         return redirect()->route('superadmin.branches.index')
             ->with('success', 'Branch created successfully.');
+    }
+
+    public function show(Branch $branch)
+    {
+        $branch->load(['users', 'customers']);
+        return view('superadmin.branches.show', compact('branch'));
     }
 
     public function edit(Branch $branch)

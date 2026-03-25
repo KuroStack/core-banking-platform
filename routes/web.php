@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\{LoginController, ProfileController};
 use App\Http\Controllers\SuperAdmin\{DashboardController as SuperAdminDashboard, BranchController, UserController, LoanTypeController, FdSetupController, AccountTypeController, CompanySetupController};
 use App\Http\Controllers\Manager\{DashboardController as ManagerDashboard, CustomerController as ManagerCustomerController, BankAccountController, FdAccountController, LoanController, LoanApplicationController as ManagerLoanAppController};
 use App\Http\Controllers\Clerk\{DashboardController as ClerkDashboard, CustomerController as ClerkCustomerController, LoanApplicationController as ClerkLoanAppController};
@@ -27,8 +27,32 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
+
+    // Password Reset
+    Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
+    Route::post('/forgot-password', function (\Illuminate\Http\Request $request) {
+        $request->validate(['email' => 'required|email']);
+        $status = \Illuminate\Support\Facades\Password::sendResetLink($request->only('email'));
+        return $status === \Illuminate\Support\Facades\Password::RESET_LINK_SENT
+            ? back()->with('success', 'Password reset link sent to your email.')
+            : back()->withErrors(['email' => __($status)]);
+    })->name('password.email');
+    Route::get('/reset-password/{token}', fn(string $token) => view('auth.reset-password', ['token' => $token, 'email' => request('email')]))->name('password.reset');
+    Route::post('/reset-password', function (\Illuminate\Http\Request $request) {
+        $request->validate(['token' => 'required', 'email' => 'required|email', 'password' => 'required|min:8|confirmed']);
+        $status = \Illuminate\Support\Facades\Password::reset($request->only('email', 'password', 'password_confirmation', 'token'), function ($user, $password) {
+            $user->forceFill(['password' => \Illuminate\Support\Facades\Hash::make($password)])->save();
+        });
+        return $status === \Illuminate\Support\Facades\Password::PASSWORD_RESET
+            ? redirect()->route('login')->with('success', 'Password has been reset. Please login.')
+            : back()->withErrors(['email' => __($status)]);
+    })->name('password.update');
 });
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+});
 
 // SuperAdmin Routes
 Route::middleware(['auth', 'role:SuperAdmin'])->prefix('superadmin')->name('superadmin.')->group(function () {
@@ -49,6 +73,7 @@ Route::middleware(['auth', 'role:Manager,SuperAdmin'])->prefix('manager')->name(
     Route::get('/customers/{customer}', [ManagerCustomerController::class, 'show'])->name('customers.show');
     Route::post('/customers/{customer}/approve', [ManagerCustomerController::class, 'approve'])->name('customers.approve');
     Route::post('/customers/{customer}/reject', [ManagerCustomerController::class, 'reject'])->name('customers.reject');
+    Route::post('/customers/bulk-approve', [ManagerCustomerController::class, 'bulkApprove'])->name('customers.bulk-approve');
     Route::resource('bank-accounts', BankAccountController::class)->only(['index','create','store','show']);
     Route::resource('fd-accounts', FdAccountController::class)->only(['index','create','store','show']);
     Route::resource('loans', LoanController::class)->only(['index','create','store','show']);
