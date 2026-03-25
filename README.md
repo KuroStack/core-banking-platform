@@ -1,12 +1,23 @@
 # Cooperative Bank Management System
 
-A full-featured cooperative banking management system built with **Laravel 13**, supporting multi-role operations, loan management, fixed deposits, share accounts, and real-time transaction processing.
+A production-ready, open-source **core banking solution** purpose-built for cooperative banks, credit societies, and microfinance institutions. Manages the complete banking lifecycle — from customer onboarding and KYC verification through loan disbursement, EMI collection, fixed deposits, and financial reporting — all from a single web application.
+
+Built with **Laravel 13** and deployable in one command via Docker. No banking software license fees. No vendor lock-in.
+
+![SuperAdmin Dashboard](docs/screenshots/superadmin-dashboard.png)
+
+---
+
+## Why This Exists
+
+Most cooperative banks in India still run on legacy desktop software or expensive licensed ERP systems. This project provides a **modern, web-based alternative** that any cooperative bank can self-host, customize, and extend — with proper role-based access, audit trails, and event-driven architecture built in from day one.
 
 ---
 
 ## Table of Contents
 
 - [Features](#features)
+- [Screenshots](#screenshots)
 - [Tech Stack](#tech-stack)
 - [System Requirements](#system-requirements)
 - [Quick Start](#quick-start)
@@ -23,19 +34,113 @@ A full-featured cooperative banking management system built with **Laravel 13**,
 
 ## Features
 
-- **Multi-Role Access Control** — SuperAdmin, Manager, Clerk, Cashier, Accountant
-- **Customer Management** — Registration, KYC (PAN + Aadhaar), approval workflow
-- **Bank Accounts** — Savings, Current, OD account types with auto-generated account numbers
-- **Fixed Deposits (FD)** — FD account creation, maturity tracking, auto-renewal
-- **Loans** — Application workflow, disbursement, EMI schedule generation, repayment tracking
-- **Gold Loans** — Dedicated gold loan product support
-- **Share Accounts** — Member share management and transactions
-- **Transactions** — Deposits, withdrawals, transfers, with full audit trail
-- **Reports** — Loan outstanding, transaction statements, loan demand collection sheets
-- **Event-Driven Notifications** — Email and SMS on key actions (customer approval, loan disbursement, FD maturity, etc.)
-- **REST API** — Full Sanctum-authenticated API for mobile/SPA clients
-- **Audit Logging** — Every sensitive action is logged with user, branch, and timestamp
-- **Multi-Branch Support** — Branch context middleware for isolated operations
+### Customer Lifecycle
+
+- **Customer Registration** — Clerk captures full personal details, address, nominee, and occupation info
+- **KYC Verification** — PAN and Aadhaar document upload with photo and ID proof storage
+- **Approval Workflow** — Clerk registers, Manager reviews and approves/rejects with remarks
+- **Member Activation** — Approved customers become active members with share accounts
+
+### Banking Operations
+
+- **Bank Accounts** — Savings, Current, and Overdraft (OD) account types with auto-generated account numbers
+- **Deposits & Withdrawals** — Cash and cheque transactions with real-time balance updates and insufficient-balance protection
+- **Fixed Deposits** — FD account creation with scheme-based interest rates, maturity tracking, and auto-processing via scheduled jobs
+- **Loan Management** — Full lifecycle: application, approval, disbursement, EMI schedule generation (daily/weekly/monthly), repayment recording, and auto-closure on final payment
+- **Gold Loans** — Dedicated gold loan product with valuation support
+- **Share Accounts** — Member share capital management and transactions
+
+### Administration
+
+- **5 User Roles** — SuperAdmin, Manager, Clerk, Cashier, Accountant — each with dedicated dashboards and scoped access
+- **Multi-Branch Architecture** — Every query is scoped to the user's branch; branch context middleware ensures data isolation
+- **Configurable Products** — SuperAdmin defines loan types, FD schemes, account types, interest rates, and membership fees
+- **Company Setup** — Bank name, address, GST/PAN, logo — appears on receipts and reports
+
+### Reporting & Compliance
+
+- **Loan Outstanding Report** — All active loans with principal, outstanding balance, and overdue status
+- **Transaction Statement** — Full debit/credit history for any account over a date range
+- **Loan Demand Collection Sheet** — EMI schedule vs actual collections for monitoring and follow-up
+- **Audit Trail** — Every sensitive action (approval, transaction, disbursement) is logged with user, branch, IP, and timestamp via event-driven listeners
+
+### Technical
+
+- **Event-Driven Architecture** — 11 domain events with queued listeners for notifications, audit logging, and schedule generation
+- **REST API** — Full Sanctum-authenticated API for mobile/SPA clients (customers, accounts, transactions, loans, FDs)
+- **Docker Standalone** — One-command deployment with Nginx, PHP-FPM, queue worker, and scheduler bundled in a single container
+- **115 Automated Tests** — 109 PHPUnit feature tests + 6 Dusk browser tests with 68 auto-generated screenshots
+
+---
+
+## Screenshots
+
+> All screenshots are auto-generated by the browser test suite (`php artisan dusk`).
+
+### Login
+
+![Login Page](docs/screenshots/login.png)
+
+### SuperAdmin Dashboard
+
+![SuperAdmin Dashboard](docs/screenshots/superadmin-dashboard.png)
+
+### Branch Management
+
+![Branch Management](docs/screenshots/branch-management.png)
+
+### User Management
+
+![User Management](docs/screenshots/user-management.png)
+
+### Loan Type Configuration
+
+![Loan Types](docs/screenshots/loan-types.png)
+
+### Company Setup
+
+![Company Setup](docs/screenshots/company-setup.png)
+
+### Manager Dashboard
+
+![Manager Dashboard](docs/screenshots/manager-dashboard.png)
+
+### Customer Approval
+
+![Customer Approval](docs/screenshots/customer-approval.png)
+
+### Customer Registration (Clerk)
+
+![Customer Registration](docs/screenshots/customer-registration.png)
+
+### Loan Application (Clerk)
+
+![Loan Application](docs/screenshots/loan-application.png)
+
+### Bank Transaction (Cashier)
+
+![Transaction Form](docs/screenshots/transaction-form.png)
+
+### Loan Outstanding Report (Accountant)
+
+![Loan Outstanding](docs/screenshots/loan-outstanding-report.png)
+
+<details>
+<summary>View all 68 screenshots organized by role</summary>
+
+Run `php artisan dusk` to regenerate. Screenshots are saved to:
+
+```
+tests/Browser/screenshots/
+├── 01-auth/          # Login, logout flow
+├── 02-superadmin/    # All CRUD: branches, users, loan types, FD, accounts, company
+├── 03-manager/       # Customers, bank accounts, FDs, loans, applications
+├── 04-clerk/         # Customer registration, loan applications
+├── 05-cashier/       # Transactions, loan repayments
+└── 06-accountant/    # Reports: outstanding, statement, demand
+```
+
+</details>
 
 ---
 
