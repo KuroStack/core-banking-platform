@@ -68,8 +68,8 @@ A full-featured cooperative banking management system built with **Laravel 13**,
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/vipul26singh/cooperative_bank.git
-cd cooperative_bank/laravel-app
+git clone https://github.com/vipul26singh/laravel-cooperative-bank.git
+cd laravel-cooperative-bank
 
 # 2. Install PHP dependencies
 composer install
