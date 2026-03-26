@@ -41,7 +41,9 @@ class LoginTest extends TestCase
 
     public function test_home_shows_landing_page_for_guest(): void
     {
+        \Illuminate\Support\Facades\File::put(storage_path('installed'), now());
         $this->get('/')->assertOk()->assertSee('CoopBank ERP');
+        \Illuminate\Support\Facades\File::delete(storage_path('installed'));
     }
 
     public function test_successful_login_redirects_to_dashboard(): void
@@ -98,14 +100,17 @@ class LoginTest extends TestCase
 
     public function test_home_redirects_authenticated_superadmin_to_dashboard(): void
     {
+        \Illuminate\Support\Facades\File::put(storage_path('installed'), now());
         $user = $this->createUser('SuperAdmin');
         $this->actingAs($user);
 
         $this->get('/')->assertRedirect(route('superadmin.dashboard'));
+        \Illuminate\Support\Facades\File::delete(storage_path('installed'));
     }
 
     public function test_home_redirects_each_role_to_correct_dashboard(): void
     {
+        \Illuminate\Support\Facades\File::put(storage_path('installed'), now());
         $roles = [
             'SuperAdmin' => 'superadmin.dashboard',
             'Manager'    => 'manager.dashboard',
@@ -128,6 +133,7 @@ class LoginTest extends TestCase
                 ->get('/')
                 ->assertRedirect(route($expectedRoute));
         }
+        \Illuminate\Support\Facades\File::delete(storage_path('installed'));
     }
 
     public function test_login_redirects_each_role_to_correct_dashboard(): void

@@ -161,7 +161,11 @@ class InstallController extends Controller
                 $dbPath = database_path('database.sqlite');
                 if (!file_exists($dbPath)) touch($dbPath);
             }
-            // 2. Write .env (uses default key from .env.example so app can boot)
+            // 2. Switch to production drivers (DB-backed) now that DB will exist
+            $env = $this->setEnv($env, 'SESSION_DRIVER', 'database');
+            $env = $this->setEnv($env, 'CACHE_STORE', 'database');
+            $env = $this->setEnv($env, 'QUEUE_CONNECTION', 'database');
+
             File::put(base_path('.env'), $env);
             $steps[] = ['name' => 'Create .env configuration', 'status' => 'success'];
 
@@ -175,23 +179,33 @@ class InstallController extends Controller
 
             // 4. Set DB config at runtime so migrations work without reloading .env
             $dbConn = $db['db_connection'] ?? 'sqlite';
-            config(["database.default" => $dbConn]);
+            config(['database.default' => $dbConn]);
             if ($dbConn === 'sqlite') {
-                config(["database.connections.sqlite.database" => database_path('database.sqlite')]);
+                $sqlitePath = database_path('database.sqlite');
+                if (!file_exists($sqlitePath)) touch($sqlitePath);
+                config(['database.connections.sqlite.database' => $sqlitePath]);
             } else {
                 config([
                     "database.connections.{$dbConn}.host"     => $db['db_host'] ?? '127.0.0.1',
                     "database.connections.{$dbConn}.port"     => $db['db_port'] ?? '3306',
                     "database.connections.{$dbConn}.database" => $db['db_database'] ?? 'coopbank',
-                    "database.connections.{$dbConn}.username"  => $db['db_username'] ?? 'root',
-                    "database.connections.{$dbConn}.password"  => $db['db_password'] ?? '',
+                    "database.connections.{$dbConn}.username" => $db['db_username'] ?? 'root',
+                    "database.connections.{$dbConn}.password" => $db['db_password'] ?? '',
                 ]);
             }
-            DB::purge();
-            DB::reconnect();
 
-            // Clear config cache
-            try { Artisan::call('config:clear'); } catch (\Exception $e) { /* may fail if no cache exists */ }
+            // Purge ALL cached connections and reconnect with new config
+            DB::purge($dbConn);
+            DB::purge('sqlite');
+            DB::purge('mysql');
+            DB::purge('pgsql');
+            DB::reconnect($dbConn);
+
+            // Verify the connection works
+            DB::connection($dbConn)->getPdo();
+
+            // Clear any cached config
+            try { Artisan::call('config:clear'); } catch (\Exception $e) {}
             $steps[] = ['name' => 'Configure database connection', 'status' => 'success'];
 
             // 4. Create storage symlink
@@ -202,15 +216,15 @@ class InstallController extends Controller
                 $steps[] = ['name' => 'Create storage symlink', 'status' => 'skipped', 'note' => 'Already exists'];
             }
 
-            // 5. Run migrations
-            Artisan::call('migrate', ['--force' => true]);
-            $steps[] = ['name' => 'Run database migrations', 'status' => 'success'];
+            // 5. Run migrations on the correct connection
+            Artisan::call('migrate', ['--database' => $dbConn, '--force' => true]);
+            $steps[] = ['name' => 'Run database migrations (' . $dbConn . ')', 'status' => 'success'];
 
-            // 6. Seed data
-            Artisan::call('db:seed', ['--class' => 'RoleSeeder', '--force' => true]);
-            Artisan::call('db:seed', ['--class' => 'CountrySeeder', '--force' => true]);
-            Artisan::call('db:seed', ['--class' => 'CompanySetupSeeder', '--force' => true]);
-            Artisan::call('db:seed', ['--class' => 'ScheduledTaskSeeder', '--force' => true]);
+            // 6. Seed data (uses the default connection we just set)
+            Artisan::call('db:seed', ['--class' => 'RoleSeeder', '--database' => $dbConn, '--force' => true]);
+            Artisan::call('db:seed', ['--class' => 'CountrySeeder', '--database' => $dbConn, '--force' => true]);
+            Artisan::call('db:seed', ['--class' => 'CompanySetupSeeder', '--database' => $dbConn, '--force' => true]);
+            Artisan::call('db:seed', ['--class' => 'ScheduledTaskSeeder', '--database' => $dbConn, '--force' => true]);
             $steps[] = ['name' => 'Seed roles, countries, company setup, scheduled tasks', 'status' => 'success'];
 
             // 7. Create admin user

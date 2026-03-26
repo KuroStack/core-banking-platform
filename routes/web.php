@@ -8,8 +8,8 @@ use App\Http\Controllers\Clerk\{DashboardController as ClerkDashboard, CustomerC
 use App\Http\Controllers\Cashier\{DashboardController as CashierDashboard, BankTransactionController, LoanRepaymentController};
 use App\Http\Controllers\Accountant\{DashboardController as AccountantDashboard, ReportController};
 
-// Installation Wizard
-Route::prefix('install')->name('install.')->group(function () {
+// Installation Wizard (uses file sessions, no DB dependency)
+Route::prefix('install')->name('install.')->middleware(\App\Http\Middleware\EnsureInstallable::class)->group(function () {
     Route::get('/', [\App\Http\Controllers\InstallController::class, 'welcome'])->name('welcome');
     Route::get('/requirements', [\App\Http\Controllers\InstallController::class, 'requirements'])->name('requirements');
     Route::get('/database', [\App\Http\Controllers\InstallController::class, 'database'])->name('database');
@@ -21,8 +21,11 @@ Route::prefix('install')->name('install.')->group(function () {
     Route::get('/complete', [\App\Http\Controllers\InstallController::class, 'complete'])->name('complete');
 });
 
-// Home — redirect authenticated users to their dashboard
+// Home — redirect to installer if not installed, dashboard if logged in, landing page otherwise
 Route::get('/', function () {
+    if (!\Illuminate\Support\Facades\File::exists(storage_path('installed'))) {
+        return redirect()->route('install.welcome');
+    }
     if (auth()->check()) {
         return redirect()->route(match (auth()->user()->role?->name) {
             'SuperAdmin' => 'superadmin.dashboard',
