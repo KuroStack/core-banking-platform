@@ -1,5 +1,8 @@
 # Cooperative Bank Management System
 
+![Status](https://img.shields.io/badge/status-active-success)
+![Tech](https://img.shields.io/badge/backend-laravel-red)
+![Database](https://img.shields.io/badge/db-mysql-blue)
 [![Tests](https://github.com/vipul26singh/laravel-cooperative-bank/actions/workflows/tests.yml/badge.svg)](https://github.com/vipul26singh/laravel-cooperative-bank/actions/workflows/tests.yml)
 
 A production-ready, open-source **core banking solution** purpose-built for cooperative banks, credit societies, and microfinance institutions. Manages the complete banking lifecycle — from customer onboarding and KYC verification through loan disbursement, EMI collection, fixed deposits, and financial reporting — all from a single web application.
@@ -9,6 +12,12 @@ Built with **Laravel 13** and deployable in one command via Docker. No banking s
 ![SuperAdmin Dashboard](docs/screenshots/superadmin-dashboard.png)
 
 ---
+
+## 🚀 Demo
+
+Demo coming soon.
+
+For early access or enterprise use cases, feel free to reach out.
 
 ## Why This Exists
 
