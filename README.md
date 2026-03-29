@@ -3,7 +3,6 @@
 ![Status](https://img.shields.io/badge/status-active-success)
 ![Tech](https://img.shields.io/badge/backend-laravel-red)
 ![Database](https://img.shields.io/badge/db-mysql-blue)
-[![Tests](https://github.com/vipul26singh/laravel-cooperative-bank/actions/workflows/tests.yml/badge.svg)](https://github.com/vipul26singh/laravel-cooperative-bank/actions/workflows/tests.yml)
 
 A production-ready, open-source **core banking solution** purpose-built for cooperative banks, credit societies, and microfinance institutions. Manages the complete banking lifecycle — from customer onboarding and KYC verification through loan disbursement, EMI collection, fixed deposits, and financial reporting — all from a single web application.
 
